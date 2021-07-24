@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>CurrentUser</title>
+
+    <style>
+
+        table {
+            width: 90%;
+            border: none;
+            margin-bottom: 20px;
+        }
+        table thead th {
+            font-weight: bold;
+            text-align: left;
+            border: none;
+            padding: 10px 15px;
+            background: #d8d8d8;
+            font-size: 14px;
+        }
+        table thead tr th:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+        table thead tr th:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+        table tbody td {
+            text-align: left;
+            border: none;
+            padding: 10px 15px;
+            font-size: 14px;
+            vertical-align: top;
+        }
+        table tbody tr:nth-child(even){
+            background: #f3f3f3;
+        }
+        table tbody tr td:first-child {
+            border-radius: 8px 0 0 8px;
+        }
+        table tbody tr td:last-child {
+            border-radius: 0 8px 8px 0;
+        }
+
+    </style>
+
+
+</head>
+<body>
+
+<table align="center">
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>LastName</th>
+        <th>Age</th>
+        <th>E-Mail</th>
+        <th>Username</th>
+        <th>Password</th>
+        <th>Role</th>
+    </tr>
+    <tr>
+        <th><span th:text ="${user.getId()}"></span></th>
+        <th><span th:text ="${user.getName()}"></span></th>
+        <th><span th:text ="${user.getLastName()}"></span></th>
+        <th><span th:text ="${user.getAge()}"></span></th>
+        <th><span th:text ="${user.getEmail()}"></span></th>
+        <th><span th:text ="${user.getUsername()}"></span></th>
+        <th><span th:text ="${user.getPassword()}"></span></th>
+        <th><span th:text ="${auth.getAuthorities()}"></span></th>
+    </tr>
+</table>
+<hr>
+<br>
+<form action="/admin">
+    <button>Go to Admin page</button>
+</form>
+<br>
+<br>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" value="Log out" />
+</form>
+
+</body>
+</html>

@@ -1,0 +1,6 @@
+package com.yozhikovd.jm_preproject_spring_boot_3_1_1.security;
+
+import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
+
+public class SpringSecurityInitializer extends AbstractSecurityWebApplicationInitializer {
+}
