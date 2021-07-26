@@ -4,6 +4,9 @@ import com.yozhikovd.jm_preproject_spring_boot_3_1_1.models.Role;
 import com.yozhikovd.jm_preproject_spring_boot_3_1_1.models.User;
 import com.yozhikovd.jm_preproject_spring_boot_3_1_1.services.UserService;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -25,7 +28,13 @@ public class AdminController {
     /////////////////////////////////////////////////////////////////////////////////////////////
 
     @GetMapping("")
-    public String showAllUsers(Model model) {
+    public String showAllUsers(Model model, Authentication authentication) {
+
+        UserDetails userDetails =
+                (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findByUsername(userDetails.getUsername());
+        model.addAttribute("auth", authentication);
+        model.addAttribute("loggedUser", user);
         model.addAttribute("usersList", userService.userList());
         return "show-all-users";
     }
@@ -37,19 +46,34 @@ public class AdminController {
     }
 
     @GetMapping("/addNewUser")
-    public String addNewUser(@ModelAttribute("user") User user) {
+    public String addNewUser(@ModelAttribute("user") User user, Model model, Authentication authentication) {
+
+        UserDetails userDetails =
+                (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user1 = userService.findByUsername(userDetails.getUsername());
+        model.addAttribute("auth", authentication);
+        model.addAttribute("loggedUser", user1);
         return "add-new-user";
     }
 
     @PostMapping("/createUser")
     public String createUser(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
                              @RequestParam(required = false, name = "username") String username,
-                             @RequestParam(required = false, name = "ADMIN") String ADMIN,
+                             @RequestParam(required = false, name = "ADMIN") String ADMIN, Model model, Authentication authentication,
                              @RequestParam(required = false, name = "USER") String USER) {
+
+        UserDetails userDetails =
+                (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user1 = userService.findByUsername(userDetails.getUsername());
+        model.addAttribute("auth", authentication);
+        model.addAttribute("loggedUser", user1);
+
+
+
 
         //////////////////////// проверка на уникальность username и ошибки ////////////////////////////////
 
-        long i = userService.userList().stream().filter(user1 -> user1.getUsername().equals(username)).count();
+        long i = userService.userList().stream().filter(user2 -> user2.getUsername().equals(username)).count();
         if (i > 0){
             bindingResult.rejectValue("username", "error.username", "Username must be Unique!");
         }
