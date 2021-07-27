@@ -68,10 +68,7 @@ public class AdminController {
         model.addAttribute("auth", authentication);
         model.addAttribute("loggedUser", user1);
 
-
-
-
-        //////////////////////// проверка на уникальность username и ошибки ////////////////////////////////
+        ////////////////////// проверка на уникальность username и ошибки ////////////////////////////////
 
         long i = userService.userList().stream().filter(user2 -> user2.getUsername().equals(username)).count();
         if (i > 0){
@@ -98,21 +95,26 @@ public class AdminController {
         return "redirect:/admin";
     }
 
+
     @GetMapping("/{id}/edit")
     public String editUser(Model model, @PathVariable("id") int id) {
         model.addAttribute("user", userService.getUserById(id));
-        return "edit-user";
+        return "redirect:/admin";
 
     }
 
     @PostMapping("/{id}")
     public String update(@ModelAttribute("user") @Valid User user, BindingResult bindingResult,
                          @PathVariable("id") int id,
+                         @RequestParam(required = false, name = "username") String username,
                          @RequestParam(required = false, name = "ADMIN") String ADMIN,
                          @RequestParam(required = false, name = "USER") String USER){
 
-        if (bindingResult.hasErrors())
-            return "edit-user";
+
+        ////////////////////// проверка на уникальность username и ошибки ////////////////////////////////
+
+        if (bindingResult.hasErrors()){
+            return "redirect:/admin";}
 
         Set<Role> roles = new HashSet<>();
         if (ADMIN != null) {
@@ -124,13 +126,13 @@ public class AdminController {
         if (ADMIN == null && USER == null ) {
             roles.add(new Role(2, USER));
         }
-            user.setRoles(roles);
+        user.setRoles(roles);
 
         userService.updateUser(user);
         return "redirect:/admin";
     }
 
-    @GetMapping("/{id}/delete")
+    @RequestMapping(path = "/{id}/delete", method = RequestMethod.POST)
     public String deleteUser(@PathVariable("id") int id) {
         userService.deleteUser(id);
         return "redirect:/admin";
@@ -142,4 +144,14 @@ public class AdminController {
         return "error";
     }
 
+
+    @RequestMapping("/user")
+    public String ShowUser(Model model, Authentication authentication) {
+        UserDetails userDetails =
+                (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findByUsername(userDetails.getUsername());
+        model.addAttribute("user", user);
+        model.addAttribute("auth", authentication);
+        return "show-current-user-for-admin";
+    }
 }

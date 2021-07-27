@@ -18,7 +18,7 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping
-    public String anyMethodNameGoesHere(Model model, Authentication authentication) {
+    public String ShowUser(Model model, Authentication authentication) {
         UserDetails userDetails =
                 (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         User user = userService.findByUsername(userDetails.getUsername());
