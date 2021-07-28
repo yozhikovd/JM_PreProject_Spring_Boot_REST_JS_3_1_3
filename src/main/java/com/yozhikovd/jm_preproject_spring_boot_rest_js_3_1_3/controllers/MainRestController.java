@@ -20,6 +20,13 @@ public class MainRestController {
 
 //////////////////////////////////////////////////////////
 
+    @GetMapping("/users")
+    public List<UserDto> getAllUsers () {
+        return userService.getAllUsersDTO();
+
+    }
+
+
 
 
 
