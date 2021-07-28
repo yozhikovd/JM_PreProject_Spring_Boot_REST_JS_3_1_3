@@ -1,5 +1,4 @@
 package com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.models;
-
 import jakarta.validation.constraints.Min;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -51,6 +50,8 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
+
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
@@ -61,10 +62,10 @@ public class User implements UserDetails {
         boolean isUser = roles.stream().anyMatch(r -> r.role.equals("ROLE_USER"));
 
         if (isAdmin && isUser){
-            return "ROLE_ADMIN, ROLE_USER";
+            return "ADMIN, USER";
         }
 
-        return isAdmin ? "ROLE_ADMIN" : "ROLE_USER";
+        return isAdmin ? "ADMIN" : "USER";
     }
 
     @Override
