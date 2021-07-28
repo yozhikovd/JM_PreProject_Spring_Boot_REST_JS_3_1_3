@@ -1,6 +1,6 @@
-package com.yozhikovd.jm_preproject_spring_boot_3_1_1.dao;
+package com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.dao;
 
-import com.yozhikovd.jm_preproject_spring_boot_3_1_1.models.User;
+import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.models.User;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Repository;

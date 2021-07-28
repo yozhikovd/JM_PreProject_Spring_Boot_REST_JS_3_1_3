@@ -1,7 +1,7 @@
-package com.yozhikovd.jm_preproject_spring_boot_3_1_1.services;
+package com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.services;
 
-import com.yozhikovd.jm_preproject_spring_boot_3_1_1.dao.UserDao;
-import com.yozhikovd.jm_preproject_spring_boot_3_1_1.models.User;
+import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.dao.UserDao;
+import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.models.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;

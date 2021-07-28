@@ -1,4 +1,4 @@
-package com.yozhikovd.jm_preproject_spring_boot_3_1_1.security;
+package com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.AuthorityUtils;

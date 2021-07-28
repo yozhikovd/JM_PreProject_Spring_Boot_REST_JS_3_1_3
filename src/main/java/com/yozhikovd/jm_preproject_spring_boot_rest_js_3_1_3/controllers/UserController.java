@@ -1,8 +1,7 @@
-package com.yozhikovd.jm_preproject_spring_boot_3_1_1.controllers;
+package com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.controllers;
 
-import com.yozhikovd.jm_preproject_spring_boot_3_1_1.models.User;
-import com.yozhikovd.jm_preproject_spring_boot_3_1_1.services.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.models.User;
+import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.services.UserService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,8 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/user")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @RequestMapping
     public String ShowUser(Model model, Authentication authentication) {

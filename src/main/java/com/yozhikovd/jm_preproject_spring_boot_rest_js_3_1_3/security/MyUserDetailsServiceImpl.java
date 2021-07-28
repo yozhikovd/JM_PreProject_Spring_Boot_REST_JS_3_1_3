@@ -1,8 +1,8 @@
-package com.yozhikovd.jm_preproject_spring_boot_3_1_1.security;
+package com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.security;
 
-import com.yozhikovd.jm_preproject_spring_boot_3_1_1.dao.UserDao;
-import com.yozhikovd.jm_preproject_spring_boot_3_1_1.models.Role;
-import com.yozhikovd.jm_preproject_spring_boot_3_1_1.models.User;
+import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.dao.UserDao;
+import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.models.Role;
+import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.models.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.core.GrantedAuthority;

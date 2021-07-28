@@ -1,8 +1,8 @@
-package com.yozhikovd.jm_preproject_spring_boot_3_1_1.controllers;
+package com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.controllers;
 
-import com.yozhikovd.jm_preproject_spring_boot_3_1_1.models.Role;
-import com.yozhikovd.jm_preproject_spring_boot_3_1_1.models.User;
-import com.yozhikovd.jm_preproject_spring_boot_3_1_1.services.UserService;
+import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.models.Role;
+import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.models.User;
+import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.services.UserService;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+
 
 import java.util.HashSet;
 import java.util.Set;

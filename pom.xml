@@ -10,9 +10,9 @@
     </parent>
 
     <groupId>com.yozhikovd</groupId>
-    <artifactId>JM_PreProject_Spring_Boot_3_1_1</artifactId>
+    <artifactId>JM_PreProject_Spring_Boot_REST_JS_3_1_3</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>JM_PreProject_Spring_Boot_3_1_1</name>
+    <name>JM_PreProject_Spring_Boot_REST_JS_3_1_3</name>
     <description>Demo project for Spring Boot</description>
 
     <properties>
