@@ -61,6 +61,7 @@ public class UserServiceImpl implements UserService {
     }
 
     public UserDto convertToUserDTO(User user) {
+
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setName(user.getName());
@@ -71,10 +72,13 @@ public class UserServiceImpl implements UserService {
         userDto.setPassword(user.getPassword());
         userDto.setRoles(user.getUserRole());
         return userDto;
+
     }
 
     @Override
-    public UserDto getUserFromID(int id) {
+      public UserDto getUserFromID(int id) {
+
       return convertToUserDTO(getUserById((id)));
+
     }
 }

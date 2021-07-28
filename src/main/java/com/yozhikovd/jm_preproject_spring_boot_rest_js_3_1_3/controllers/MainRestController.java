@@ -26,9 +26,10 @@ public class MainRestController {
 
     }
 
-
-
-
+    @GetMapping("/users/{id}")
+    public UserDto getUserFromID(@PathVariable int id){
+        return userService.getUserFromID(id);
+    }
 
 
 
