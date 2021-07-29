@@ -1,8 +1,6 @@
 package com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.controllers;
 
 import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.dto.UserDto;
-import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.exeption.NoSuchUserEx;
-import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.exeption.UserIncorrectData;
 import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.models.Role;
 import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.models.User;
 import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.services.UserService;
@@ -28,33 +26,31 @@ public class MainRestController {
 //    показать всех пользователей
 
     @GetMapping("/users")
-    public List<UserDto> getAllUsers() {
-        return userService.getAllUsersDTO();
+    public ResponseEntity<List<UserDto>> getAllUsers() {
+        final List<UserDto> userDtoList = userService.getAllUsersDTO();
+
+        return userDtoList != null && !userDtoList.isEmpty()
+                ? new ResponseEntity<>(userDtoList, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
     }
 
     //    показать пользователя по id
 
     @GetMapping("/users/{id}")
-    public UserDto getUserFromID(@PathVariable long id) {
-        UserDto userDto = userService.getUserFromID(id);
+    public ResponseEntity<UserDto> getUserFromID(@PathVariable long id) {
+        final UserDto userDto = userService.getUserFromID(id);
 
-        if (userDto == null) {
-            throw new NoSuchUserEx("Not found user with ID: " + id);
-        }
-        return userDto;
+        return userDto != null
+                ? new ResponseEntity<>(userDto, HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<UserIncorrectData> handlerException(NoSuchUserEx ex) {
-        UserIncorrectData data = new UserIncorrectData();
-        data.setInfo(ex.getMessage());
-        return new ResponseEntity<>(data, HttpStatus.NOT_FOUND);
-    }
 
     //    добавить пользователя
 
     @PostMapping("/users")
-    public User addNewUser(@RequestBody User user){
+    public ResponseEntity<?> addNewUser(@RequestBody User user) {
 
         Set<Role> roles = new HashSet<>();
         if (user.getRole().contains("ADMIN")) {
@@ -67,14 +63,18 @@ public class MainRestController {
             roles.add(new Role(2, "USER"));
         }
         user.setRoles(roles);
+
         userService.addNewUser(user);
-        return user;
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     //    удалить пользователя по id
 
     @PutMapping("/users")
-    public User updateUser(@RequestBody User user){
+    public ResponseEntity<?> updateUser(@RequestBody User user) {
+
+        boolean statusUpdate = false;
 
         Set<Role> roles = new HashSet<>();
         if (user.getRole().contains("ADMIN")) {
@@ -86,13 +86,31 @@ public class MainRestController {
         if (user.getRole() == null) {
             roles.add(new Role(2, "USER"));
         }
-        user.setRoles(roles);
-        userService.updateUser(user);
-        return user;
+        try {
+            user.setRoles(roles);
+            userService.updateUser(user);
+            statusUpdate = true;
+        } catch (RuntimeException ignored) {
+
+        }
+
+        return statusUpdate
+                ? new ResponseEntity<>(HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+
     }
 
     @DeleteMapping("/users/{id}")
-    public void deleteUser(@PathVariable long id) {
-        userService.deleteUser(id);
+    public ResponseEntity<?> deleteUser(@PathVariable long id) {
+        boolean statusDelete = false;
+        try {
+            userService.deleteUser(id);
+            statusDelete = true;
+        } catch (RuntimeException ignored) {
+        }
+
+        return statusDelete
+                ? new ResponseEntity<>(HttpStatus.OK)
+                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
     }
 }
