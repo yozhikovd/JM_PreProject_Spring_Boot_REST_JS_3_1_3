@@ -50,7 +50,8 @@ public class User implements UserDetails {
     @Column(name = "password")
     private String password;
 
-
+    @Transient
+    private String role;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"),
