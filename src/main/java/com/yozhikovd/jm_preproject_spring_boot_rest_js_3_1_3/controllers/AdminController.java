@@ -41,7 +41,7 @@ public class AdminController {
     }
 
     @GetMapping("/{id}")
-    public String showUserById(@PathVariable("id") int id, Model model) {
+    public String showUserById(@PathVariable("id") long id, Model model) {
         model.addAttribute("userById", userService.getUserById(id));
         return "show-current-user";
     }
@@ -98,7 +98,7 @@ public class AdminController {
 
 
     @GetMapping("/{id}/edit")
-    public String editUser(Model model, @PathVariable("id") int id) {
+    public String editUser(Model model, @PathVariable("id") long id) {
         model.addAttribute("user", userService.getUserById(id));
         return "redirect:/admin";
 
@@ -134,7 +134,7 @@ public class AdminController {
     }
 
     @RequestMapping(path = "/{id}/delete", method = RequestMethod.POST)
-    public String deleteUser(@PathVariable("id") int id) {
+    public String deleteUser(@PathVariable("id") long id) {
         userService.deleteUser(id);
         return "redirect:/admin";
     }
