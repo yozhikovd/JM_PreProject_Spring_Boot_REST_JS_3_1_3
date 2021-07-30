@@ -19,21 +19,24 @@ public class Role implements GrantedAuthority {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public int id;
+    private Long id;
+    private String roleName;
 
-    @Column (name = "role")
-    public String role;
-
-    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
+    @Transient
+    @ManyToMany(mappedBy = "roles")
     private Set<User> users;
 
-    public Role(int id, String role) {
-        this.id = id;
-        this.role = role;
+    public Role(String roleName) {
+        if (roleName.contains("ADMIN")) {
+            this.id = 1L;
+        } else if (roleName.contains("USER")) {
+            this.id = 2L;
+        }
+        this.roleName = roleName;
     }
 
     @Override
     public String getAuthority() {
-        return getRole();
+        return roleName;
     }
 }

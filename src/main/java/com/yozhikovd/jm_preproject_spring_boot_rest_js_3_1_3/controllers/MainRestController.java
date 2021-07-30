@@ -1,116 +1,75 @@
 package com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.controllers;
 
-import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.dto.UserDto;
 import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.models.Role;
 import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.models.User;
+import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.services.RoleService;
 import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.services.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 
 @RestController
-@RequestMapping("/api")
 public class MainRestController {
 
     private final UserService userService;
+    private final RoleService roleService;
 
-    public MainRestController(UserService userService) {
+    public MainRestController(UserService userService, RoleService roleService) {
         this.userService = userService;
+        this.roleService = roleService;
     }
 
-//    показать всех пользователей
+    @GetMapping("/getAuthorizedUser")
+    public ResponseEntity<?> getAuthorizedUser() {
+        UserDetails userDetails =
+                (UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        User user = userService.findByUsername(userDetails.getUsername());
+        return ResponseEntity.ok().body(user);
+    }
 
-    @GetMapping("/users")
-    public ResponseEntity<List<UserDto>> getAllUsers() {
-        final List<UserDto> userDtoList = userService.getAllUsersDTO();
+    @GetMapping("/getAllUsers")
+    public ResponseEntity<Iterable<User>> getAllUsers() {
+        final List<User> userDtoList = userService.userList();
 
         return userDtoList != null && !userDtoList.isEmpty()
                 ? new ResponseEntity<>(userDtoList, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
     }
 
-    //    показать пользователя по id
+    @GetMapping("/getAllRoles")
+    public ResponseEntity<Iterable<Role>> getAllRoles() {
+        return ResponseEntity.ok().body(roleService.getAllRoles());
+    }
 
-    @GetMapping("/users/{id}")
-    public ResponseEntity<UserDto> getUserFromID(@PathVariable long id) {
-        final UserDto userDto = userService.getUserFromID(id);
+    @GetMapping("/getUserById/{id}")
+    public ResponseEntity<User> getUserFromID(@PathVariable long id) {
+        final User userDto = userService.getUserById(id);
 
         return userDto != null
                 ? new ResponseEntity<>(userDto, HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-
-    //    добавить пользователя
-
-    @PostMapping("/users")
-    public ResponseEntity<?> addNewUser(@RequestBody User user) {
-
-        Set<Role> roles = new HashSet<>();
-        if (user.getRole().contains("ADMIN")) {
-            roles.add(new Role(1, "ADMIN"));
-        }
-        if (user.getRole().contains("USER")) {
-            roles.add(new Role(2, "USER"));
-        }
-        if (user.getRole() == null) {
-            roles.add(new Role(2, "USER"));
-        }
-        user.setRoles(roles);
-
+    @PostMapping("/create")
+    public ResponseEntity<User> createUser(@RequestBody User user) {
         userService.addNewUser(user);
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.ok().body(user);
     }
 
-    //    удалить пользователя по id
-
-    @PutMapping("/users")
-    public ResponseEntity<?> updateUser(@RequestBody User user) {
-
-        boolean statusUpdate = false;
-
-        Set<Role> roles = new HashSet<>();
-        if (user.getRole().contains("ADMIN")) {
-            roles.add(new Role(1, "ADMIN"));
-        }
-        if (user.getRole().contains("USER")) {
-            roles.add(new Role(2, "USER"));
-        }
-        if (user.getRole() == null) {
-            roles.add(new Role(2, "USER"));
-        }
-        try {
-            user.setRoles(roles);
-            userService.updateUser(user);
-            statusUpdate = true;
-        } catch (RuntimeException ignored) {
-
-        }
-
-        return statusUpdate
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-
+    @PutMapping("/update")
+    public ResponseEntity<User> updateUser(@RequestBody User user) {
+        userService.updateUser(user);
+        return ResponseEntity.ok().body(user);
     }
 
-    @DeleteMapping("/users/{id}")
-    public ResponseEntity<?> deleteUser(@PathVariable long id) {
-        boolean statusDelete = false;
-        try {
-            userService.deleteUser(id);
-            statusDelete = true;
-        } catch (RuntimeException ignored) {
-        }
-
-        return statusDelete
-                ? new ResponseEntity<>(HttpStatus.OK)
-                : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") Long id) {
+        userService.deleteUser(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

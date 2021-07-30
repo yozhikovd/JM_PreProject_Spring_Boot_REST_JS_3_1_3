@@ -52,10 +52,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                 .antMatchers("/login").anonymous()
-                .antMatchers("/api/**").anonymous()
-                .antMatchers("/js/**").anonymous()
-                 .antMatchers("/admin/**").access("hasRole('ROLE_ADMIN')")
-                .antMatchers("/user/**").access("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+                .antMatchers("/","/delete/**").hasRole("ADMIN")
+                .antMatchers("/user").hasRole("USER")
                 .anyRequest().authenticated();
     }
     @Bean

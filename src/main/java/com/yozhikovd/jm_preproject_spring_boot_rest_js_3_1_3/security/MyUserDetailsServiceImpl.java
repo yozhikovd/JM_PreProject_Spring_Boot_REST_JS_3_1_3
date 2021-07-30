@@ -28,11 +28,11 @@ public class MyUserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userDao.findByUsername(username);
+    public UserDetails loadUserByUsername(String name) throws UsernameNotFoundException {
+        User user = userDao.findByUsername(name);
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
         for (Role role : user.getRoles()) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(role.getRole()));
+            grantedAuthorities.add(new SimpleGrantedAuthority(role.getAuthority()));
         }
         return new org.springframework.security.core.userdetails.User(user.getUsername(),
                 user.getPassword(), grantedAuthorities);

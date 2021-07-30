@@ -1,7 +1,6 @@
 package com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.services;
 
 import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.dao.UserDao;
-import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.dto.UserDto;
 import com.yozhikovd.jm_preproject_spring_boot_rest_js_3_1_3.models.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,30 +54,5 @@ public class UserServiceImpl implements UserService {
         return userDao.findByUsername(username);
     }
 
-    @Override
-    public List<UserDto> getAllUsersDTO() {
-        return userList().stream().map(this::convertToUserDTO).collect(Collectors.toList());
-    }
 
-    public UserDto convertToUserDTO(User user) {
-
-        UserDto userDto = new UserDto();
-        userDto.setId(user.getId());
-        userDto.setName(user.getName());
-        userDto.setLastName(user.getLastName());
-        userDto.setAge(user.getAge());
-        userDto.setEmail(user.getEmail());
-        userDto.setUsername(user.getUsername());
-        userDto.setPassword(user.getPassword());
-        userDto.setRoles(user.getUserRole());
-        return userDto;
-
-    }
-
-    @Override
-      public UserDto getUserFromID(Long id) {
-
-      return convertToUserDTO(getUserById((id)));
-
-    }
 }
